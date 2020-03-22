@@ -1,7 +1,10 @@
 import React from "react";
 import { View, Text, FlatList, Button, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Colors from "../../constants/Colors";
+import CartItem from "../../components/shop/CartItem";
+import * as cartActions from "../../store/actions/cart";
+import * as orderActions from "../../store/actions/orders";
 
 const CartScreen = props => {
   const cartTotalAmount = useSelector(state => state.cart.totalAmount);
@@ -16,25 +19,49 @@ const CartScreen = props => {
         sum: state.cart.items[key].sum
       });
     }
-    return transformedCartItems;
+    return transformedCartItems.sort((a, b) =>
+      a.productId > b.productId ? 1 : -1
+    );
   });
+
+  const dispatch = useDispatch();
 
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:{" "}
-          <Text style={styles.amount}>${cartTotalAmount.toFixed(2)}</Text>
+          <Text style={styles.amount}>
+            $
+            {cartTotalAmount < 0
+              ? cartTotalAmount * -0
+              : cartTotalAmount.toFixed(2)}
+          </Text>
         </Text>
         <Button
           color={Colors.accent}
           title="Order Now"
           disabled={cartItems.length === 0}
+          onPress={() => {
+            dispatch(orderActions.addOrder(cartItems, cartTotalAmount));
+          }}
         />
       </View>
-      <View>
-        <Text>CART ITEMS</Text>
-      </View>
+      <FlatList
+        data={cartItems}
+        keyExtractor={item => item.productId}
+        renderItem={itemData => (
+          <CartItem
+            quantity={itemData.item.quantity}
+            title={itemData.item.productTitle}
+            amount={itemData.item.sum}
+            onRemove={() => {
+              dispatch(cartActions.removeFromCart(itemData.item.productId));
+            }}
+            deletable={true}
+          />
+        )}
+      />
     </View>
   );
 };
@@ -64,5 +91,9 @@ const styles = StyleSheet.create({
     color: Colors.primary
   }
 });
+
+CartScreen.navigationOptions = {
+  headerTitle: "Your Cart"
+};
 
 export default CartScreen;
