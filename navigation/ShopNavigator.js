@@ -8,21 +8,23 @@ import ProductOverviewScreen from "../screens/shop/ProductsOverviewScreen";
 import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 import CartScreen from "../screens/shop/CartScreen";
 import OrdersScreen from "../screens/shop/OrdersScreen";
+import UserProductsScreen from "../screens/user/UserProductsScreen";
+import EditProductScreen from "../screens/user/EditProductScreen";
 import Colors from "../constants/Colors";
 
 const Stack = createStackNavigator();
 
 const defaultScreenOptions = {
   headerStyle: {
-    backgroundColor: Platform.OS === "android" ? Colors.primary : ""
+    backgroundColor: Platform.OS === "android" ? Colors.primary : "",
   },
   headerTitleStyle: {
-    fontFamily: "open-sans-bold"
+    fontFamily: "open-sans-bold",
   },
   headerBackTitleStyle: {
-    fontFamily: "open-sans"
+    fontFamily: "open-sans",
   },
-  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
 };
 
 const ProductsNavigator = () => {
@@ -59,6 +61,23 @@ const OrdersNavigator = () => {
   );
 };
 
+const AdminNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={defaultScreenOptions}>
+      <Stack.Screen
+        name="UserProducts"
+        component={UserProductsScreen}
+        options={UserProductsScreen.navigationOptions}
+      />
+      <Stack.Screen
+        name="EditProduct"
+        component={EditProductScreen}
+        options={EditProductScreen.navigationOptions}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const Drawer = createDrawerNavigator();
 
 const ShopNavigator = () => {
@@ -75,7 +94,7 @@ const ShopNavigator = () => {
                 color={color}
                 size={size}
               />
-            )
+            ),
           }}
         />
         <Drawer.Screen
@@ -88,7 +107,20 @@ const ShopNavigator = () => {
                 color={color}
                 size={size}
               />
-            )
+            ),
+          }}
+        />
+        <Drawer.Screen
+          name="Admin"
+          component={AdminNavigator}
+          options={{
+            drawerIcon: ({ focused, color, size }) => (
+              <Ionicons
+                name={Platform.OS == "android" ? "md-create" : "ios-create"}
+                color={color}
+                size={size}
+              />
+            ),
           }}
         />
       </Drawer.Navigator>
