@@ -3,6 +3,7 @@ import {
   DELETE_PRODUCT,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
+  SET_PRODUCTS,
 } from "../actions/products";
 import Product from "../../models/product";
 
@@ -13,10 +14,15 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case SET_PRODUCTS:
+      return {
+        availableProducts: action.products,
+        userProducts: action.products,
+      };
     case CREATE_PRODUCT:
       const prodData = action.productData;
       const newProduct = new Product(
-        new Date().toString(),
+        prodData.id,
         "u1",
         prodData.title,
         prodData.imageUrl,

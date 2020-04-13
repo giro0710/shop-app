@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import { enableScreens } from "react-native-screens";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
+import ReduxThunk from "redux-thunk";
 
 import productReducer from "./store/reducers/products";
 import cartReducer from "./store/reducers/cart";
@@ -16,15 +17,15 @@ enableScreens();
 const rootReducer = combineReducers({
   products: productReducer,
   cart: cartReducer,
-  orders: ordersReducer
+  orders: ordersReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const fetchFonts = () => {
   return Font.loadAsync({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
-    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf")
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
   });
 };
 

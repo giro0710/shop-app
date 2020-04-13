@@ -63,7 +63,6 @@ const EditProductScreen = (props) => {
   });
 
   const submitHandler = useCallback(() => {
-    console.log(formState);
     if (!formState.formIsValid) {
       Alert.alert("Wrong input!", "Please check the errors in the form.", [
         {
@@ -82,7 +81,6 @@ const EditProductScreen = (props) => {
           formState.inputValues.imageUrl
         )
       );
-      console.log("Editting a product...");
     } else {
       dispatch(
         productActions.createProduct(
