@@ -14,7 +14,6 @@ export const createProduct = (title, description, price, imageUrl) => {
 };
 
 export const updateProduct = (productId, title, description, imageUrl) => {
-  console.log(productId, title, description, imageUrl);
   return {
     type: UPDATE_PRODUCT,
     pid: productId,
